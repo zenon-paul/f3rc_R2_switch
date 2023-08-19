@@ -6,37 +6,35 @@ using ThisThread::sleep_for;
 
 InterruptIn sw(D6);
 
-int status = 0;
-int status2 = 0;
+int swstats = 0;
+int flag = 0;
 unsigned int checker = 0;
 unsigned int unsintmax = ~0;
 
-void test2(){//fall
-    if(status2){
-        le2 = 0;
-        status2 = 0;
+void fallfunc(){//fall
+    if(swstats){
+        swstats = 0;
     }
 }
-void test(){//rise
-    if(status2 == 0){
-        le2 = 1;
-        status2 = 1;
+void risefunc(){//rise
+    if(swstats == 0){
+        swstats = 1;
     }
 }
 
 int main(){
-    sw.rise(test);
-    sw.fall(test2);
+    sw.rise(risefunc);
+    sw.fall(fallfunc);
     while(1){
         checker = checker << 1;
-        checker += (status2 == 1)?1:0;
+        checker += (swstats == 1)?1:0;
         if(checker == unsintmax){
-            status = 1;
+            flag = 1;
         }
         else{
-            status = 0;
+            flag = 0;
         }
-        printf("S2:%d S:%d\n",status2,status);
+        printf("swstatus:%d flag:%d\n",swstats,flag);
     }
 }
 
